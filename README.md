@@ -5,7 +5,7 @@
 
 ## 📂 Datasets
 
-- The original **MR2** dataset can be downloaded from:  
+- The original dataset can be downloaded from:  
   - [Google Drive](https://drive.google.com/file/d/14NNqLKSW1FzLGuGkqwlzyIPXnKDzEFX4/view?usp=sharing)  
   - [Baidu Cloud (提取码: 1odv)](https://pan.baidu.com/s/1OV_Oab0zQgI8P2Wo1qwBuw?pwd=1odv)
 
