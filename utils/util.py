@@ -27,7 +27,6 @@ def load_img_pil(image_path):
     try:
         with open(image_path, 'rb') as f:
             img = Image.open(f)
-            # 将图片转换为RGB格式，无论原始格式如何
             img = img.convert('RGB')
             return img
     except Exception as e:
@@ -143,7 +142,7 @@ def get_transform_Compose():
             T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
 
-def get_transform_Compose_ELA():  #ELA图片不进行裁剪
+def get_transform_Compose_ELA():
     return T.Compose([
             T.Resize((224,224)),
             T.ToTensor(),
@@ -152,10 +151,8 @@ def get_transform_Compose_ELA():  #ELA图片不进行裁剪
 
 def get_ela_image_path(image_path):
     ela_path = "ELA/"+image_path
-    # 在文件名前添加 "ela_"
     base_name = os.path.basename(image_path)
     ela_filename = "ela_" + base_name
-    # 返回新的 ELA 路径
     ela_path = os.path.join(os.path.dirname(ela_path), ela_filename)
     return ela_path
 
@@ -171,9 +168,6 @@ def set_torch_seed(seed):
     os.environ['PYTHONHASHSEED'] = str(seed)
 
 def load_dispatch_labels(csv_path):
-    """
-    从CSV文件中加载 dispatch_label，返回一个 dict：{sample_key: dispatch_label}
-    """
     dispatch_dict = {}
     with open(csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -184,29 +178,16 @@ def load_dispatch_labels(csv_path):
     return dispatch_dict
 
 def index_batch(inputs, indices):
-    """
-    对输入 batch 进行索引。支持 BatchEncoding(dict-like) 或 tensor。
-    Args:
-        inputs: List of BatchEncoding 或 Tensor
-        indices: Tensor索引
-
-    Returns:
-        索引后的 batch 列表
-    """
-    idx_list = indices.tolist()  # 先转成列表，transformers能接受list索引
+    idx_list = indices.tolist()
     indexed = []
     for x in inputs:
-        if isinstance(x, BatchEncoding):  # BatchEncoding 或类似 dict
-            # 对字典中的每个 tensor 按 idx_list 取子集
+        if isinstance(x, BatchEncoding):
             indexed.append({k: v[idx_list] for k, v in x.items()})
         elif isinstance(x, list):
             indexed.append([x[i] for i in idx_list])
         else:
             indexed.append(x[idx_list])
     return indexed
-
-
-
 
 if __name__ == '__main__':
     pass

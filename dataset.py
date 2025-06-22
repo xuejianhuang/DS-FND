@@ -64,7 +64,7 @@ class System2Dataset(BaseDataset):
         item = self.data_items[key]
         label, caption, img_to_text, pil_img, q_img, ela_img = self.get_item_common(key)
 
-        # 加载视觉与文本证据
+        # Load visual and textual evidences
         try:
             direct_path = os.path.join(self.data_root_dir, item['direct_path'])
             inv_path = os.path.join(self.data_root_dir, item['inv_path'])
@@ -147,8 +147,6 @@ def get_model_and_data(model_name='System1', dataset='weibo', batch=config.batch
         test_ds = SchedulerDataset(test_items, data_root_dir,labels=labels)
         model = Scheduler().to(config.device)
         collate_fn = collate_scheduler
-
-
     else:
         raise ValueError(f"Unsupported model: {model_name}")
 
