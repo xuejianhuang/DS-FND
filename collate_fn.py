@@ -45,7 +45,7 @@ def collate_sys2(batch):
     for sample in samples:
         labels.append(sample['label'])
 
-        # 文本证据处理
+        # Process textual evidence
         t_evidence = sample['t_evidence'][:max_t_len] + [""] * (max_t_len - len(sample['t_evidence']))
         t_encoded = config._tokenizer(
             t_evidence, return_tensors='pt', max_length=config.text_max_length,
@@ -53,7 +53,7 @@ def collate_sys2(batch):
         ).to(config.device)
         t_evidence_batch.append(t_encoded)
 
-        # 图像证据处理
+        # Process image evidence with padding if necessary
         i_evidence = sample['i_evidence']
         if len(sample['i_evidence'].shape) > 2:
             pad_size = (max_i_len - i_evidence.shape[0], *i_evidence.shape[1:])
@@ -62,7 +62,7 @@ def collate_sys2(batch):
         padded_imgs = torch.cat([i_evidence, torch.zeros(pad_size, device=i_evidence.device)], dim=0)
         i_evidence_batch.append(padded_imgs)
 
-        # 其余字段
+        # Collect other fields
         qImg_batch.append(sample['qImg'])
         img_batch.append(sample['img'])
         qCap_batch.append(sample['qCap'])
